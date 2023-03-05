@@ -6,11 +6,11 @@
 ---
 
 ## ERD
-
+https://www.erdcloud.com/d/v4tocauwyNq5NaJYM
 --- 
 
-## API
-
+## API 명세서
+https://docs.google.com/spreadsheets/d/1TK3-Vr5HYBOyQQXsBVMRjCmwJdozmW8X/edit#gid=990061567
 ---
 
 ## 개발일지
@@ -22,3 +22,11 @@
 
 ### 연
 - ERD 설계
+
+### 2023-03-05
+
+### 연일
+- REST API 리스트업
+
+### 연
+- REST API 리스트업
