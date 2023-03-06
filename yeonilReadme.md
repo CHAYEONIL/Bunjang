@@ -6,3 +6,10 @@
 
 ### 2023-03-05
 - REST API 리스트업
+
+### 2023-03-06
+#### 1차 피드백
+- ERD에 createdAt, updatedAt, status 빠진 부분 확인하기
+- ERD 위도 경도 값 추가
+- API search 대신에 필터링으로 구현
+- 상점 검색 등은 path variable로 처리
