@@ -32,7 +32,10 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_PASSWORD(false, 2018, "비밀번호를 입력하세요."),
     POST_USERS_EMPTY_NICKNAME(false, 2019, "닉네임을 정확히 입력하세요."),
 
-
+    // [POST] /users/login
+    POST_LOGIN_EMPTY_EMAIL(false, 2020, "아이디를 입력해주세요."),
+    POST_LOGIN_INVALID_EMAIL(false, 2021, "아이디는 이메일주소 형식으로 입력해주세요."),
+    POST_LOGIN_EMPTY_PASSWORD(false, 2022, "비밀번호를 입력해주세요."),
 
     /**
      * 3000 : Response 오류

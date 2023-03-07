@@ -73,6 +73,19 @@ public class UserController {
     @PostMapping("/login")
     public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq){
         try{
+            // 이메일 유효성 검사
+            if(postLoginReq.getEmail() == null){ // null 값인 경우
+                return new BaseResponse<>(POST_LOGIN_EMPTY_EMAIL);
+            }
+            if(!isRegexEmail(postLoginReq.getEmail())){ // 이메일 정규 표현
+                return new BaseResponse<>(POST_LOGIN_INVALID_EMAIL);
+            }
+
+            // 비밀번호 유효성 검사
+            if(postLoginReq.getPassword() == null){ // null 값인 경우
+                return new BaseResponse<>(POST_LOGIN_EMPTY_PASSWORD);
+            }
+
             PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
             return new BaseResponse<>(postLoginRes);
         } catch (BaseException exception){
@@ -138,7 +151,7 @@ public class UserController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             //같다면 유저네임 변경
-            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getUserName());
+            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getName());
             userService.modifyUserName(patchUserReq);
 
             String result = "";
