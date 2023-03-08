@@ -3,6 +3,7 @@ package com.example.demo.src.home;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.home.model.GetBannerRes;
+import com.example.demo.src.home.model.GetProductsRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,4 +39,14 @@ public class HomeProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
+    public List<GetProductsRes> getHomeProducts() throws BaseException {
+        try {
+            List<GetProductsRes> getProductsRes = homeDao.getHomeProducts();
+            return getProductsRes;
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
 }

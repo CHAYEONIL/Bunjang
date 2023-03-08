@@ -3,6 +3,7 @@ package com.example.demo.src.home;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.home.model.GetBannerRes;
+import com.example.demo.src.home.model.GetProductsRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,4 +45,18 @@ public class HomeController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    //홈 화면 상품 API
+    @ResponseBody
+    @GetMapping("/products")
+    public BaseResponse <List<GetProductsRes>> getHomeProducts() {
+
+        try{
+            List<GetProductsRes> getProductsRes = homeProvider.getHomeProducts();
+            return new BaseResponse<>(getProductsRes);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
 }
