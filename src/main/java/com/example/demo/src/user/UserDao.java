@@ -76,15 +76,22 @@ public class UserDao {
 
     }
 
-    public int modifyUserName(PatchUserReq patchUserReq){
-        String modifyUserNameQuery = "update UserInfo set userName = ? where userIdx = ? ";
-        Object[] modifyUserNameParams = new Object[]{patchUserReq.getUserName(), patchUserReq.getUserIdx()};
+    public int modifyUserInfo(PatchUserReq patchUserReq){
+        String modifyUserContentQuery = "update User set userNickName =?, profileImageUrl =?, content = ? where userId = ? ";
+        Object[] modifyUserContentParams = new Object[]{patchUserReq.getUserNickName(), patchUserReq.getProfileImageUrl(), patchUserReq.getContent(), patchUserReq.getUserId()};
 
-        return this.jdbcTemplate.update(modifyUserNameQuery,modifyUserNameParams);
+        return this.jdbcTemplate.update(modifyUserContentQuery,modifyUserContentParams);
+    }
+
+    public int modifyStatus(PatchUserStatusReq patchUserStatusReq){
+        String modifyUserContentQuery = "update User set status =?  where userId = ? ";
+        Object[] modifyUserContentParams = new Object[]{patchUserStatusReq.getStatus(), patchUserStatusReq.getUserId()};
+
+        return this.jdbcTemplate.update(modifyUserContentQuery,modifyUserContentParams);
     }
 
     public User getPwd(PostLoginReq postLoginReq){
-        String getPwdQuery = "select userId, name, userNickName, profileImageUrl, email, password, phoneNum, content from User where email = ?";
+        String getPwdQuery = "select userId, name, userNickName, profileImageUrl, email, password, phoneNum, content, status from User where email = ?";
         String getPwdParams = postLoginReq.getEmail();
 
         return this.jdbcTemplate.queryForObject(getPwdQuery,
@@ -96,7 +103,8 @@ public class UserDao {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("phoneNum"),
-                        rs.getString("content")
+                        rs.getString("content"),
+                        rs.getString("status")
                 ),
                 getPwdParams
                 );

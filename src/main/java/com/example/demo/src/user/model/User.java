@@ -2,13 +2,15 @@ package com.example.demo.src.user.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class User {
-    private int userId;
+    private int userIdx;
     private String name;
     private String userNickName;
     private String profileImageUrl;
@@ -16,4 +18,5 @@ public class User {
     private String password;
     private String phoneNum;
     private String content;
+    private String status;
 }

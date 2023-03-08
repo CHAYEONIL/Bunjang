@@ -9,6 +9,7 @@ import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -93,6 +94,54 @@ public class UserController {
         }
     }
     /**
+     * 상점수정 API
+     * [POST] /users/:userId
+     */
+    @ResponseBody
+    @PatchMapping("/{userId}")
+    public BaseResponse<String> modifyUserName(@PathVariable("userId") int userId, @RequestBody User user){
+        try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userId != userIdxByJwt){
+            return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //같다면 유저네임 변경
+            PatchUserReq patchUserReq = new PatchUserReq(userId,user.getProfileImageUrl(),user.getUserNickName(), user.getContent());
+            userService.modifyUserInfo(patchUserReq);
+
+            String result = "수정이 완료되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     * 회원탈퇴 API
+     * [POST] /users/:userId/status
+     */
+    @ResponseBody
+    @PatchMapping("/{userId}/status")
+    public BaseResponse<String> modifyStatus(@PathVariable("userId") int userId, @RequestBody User user){
+        try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userId != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //같다면 유저네임 변경
+            PatchUserStatusReq patchUserStatusReq = new PatchUserStatusReq(userId,user.getStatus());
+            userService.modifyUserStatus(patchUserStatusReq);
+
+            String result = "수정이 완료되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
      * 회원 조회 API
      * [GET] /users
      * 회원 번호 및 이메일 검색 조회 API
@@ -134,32 +183,4 @@ public class UserController {
         }
 
     }
-
-    /**
-     * 유저정보변경 API
-     * [PATCH] /users/:userIdx
-     * @return BaseResponse<String>
-     */
-    @ResponseBody
-    @PatchMapping("/{userIdx}")
-    public BaseResponse<String> modifyUserName(@PathVariable("userIdx") int userIdx, @RequestBody User user){
-        try {
-            //jwt에서 idx 추출.
-            int userIdxByJwt = jwtService.getUserIdx();
-            //userIdx와 접근한 유저가 같은지 확인
-            if(userIdx != userIdxByJwt){
-                return new BaseResponse<>(INVALID_USER_JWT);
-            }
-            //같다면 유저네임 변경
-            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getName());
-            userService.modifyUserName(patchUserReq);
-
-            String result = "";
-        return new BaseResponse<>(result);
-        } catch (BaseException exception) {
-            return new BaseResponse<>((exception.getStatus()));
-        }
-    }
-
-
 }

@@ -10,6 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PatchUserReq {
-    private int userIdx;
-    private String userName;
+    private int userId;
+    private String profileImageUrl;
+    private String userNickName;
+    private String content;
 }
