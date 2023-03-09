@@ -38,6 +38,10 @@ public enum BaseResponseStatus {
     POST_LOGIN_EMPTY_PASSWORD(false, 2022, "비밀번호를 입력해주세요."),
 
     /**
+     * /products
+    */
+    PRODUCT_NOT_EXIST(false, 2018, "존재하지 않는 상품입니다."),
+    
      * 3000 : Response 오류
      */
     // Common
