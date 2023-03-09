@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostUserRes {
-    private String jwt;
+public class PatchUserStatusReq {
     private int userId;
+    private String status;
 }
