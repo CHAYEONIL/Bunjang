@@ -110,6 +110,31 @@ public class UserDao {
                 );
 
     }
-
-
+    public GetMyPageRes getMyPage(int userIdx){
+        String getMyPageQuery = "select userId, profileImageUrl, userNickName, content, (select case when AVG(score) is null then 0 else AVG(score) end from Review) as scoreAvg, CONCAT('+', TIMESTAMPDIFF(DAY, User.createdAt, now())) as openDay, 'OK' as userStatusCheck from User where userId =?";
+        int getMyPageParams = userIdx;
+        return jdbcTemplate.queryForObject(getMyPageQuery,
+                (rs, rsNum) -> new GetMyPageRes(
+                        rs.getInt("userId"),
+                        rs.getString("profileImageUrl"),
+                        rs.getString("userNickName"),
+                        rs.getString("content"),
+                        rs.getDouble("scoreAvg"),
+                        rs.getString("openDay"),
+                        rs.getString("userStatusCheck")),
+                getMyPageParams);
+    }
+    public List<GetProductRes> getProduct(int userIdx){
+        String getProductQuery = "select P.productId, P.userId, P.title, P.price, P.tradeStatus, PI.Imageurl from Product P inner join ProductImage PI on PI.productId = P.productId where P.userId =?";
+        int getProductParams = userIdx;
+        return jdbcTemplate.query(getProductQuery,
+                (rs, rsNum) -> new GetProductRes(
+                        rs.getInt("productId"),
+                        rs.getInt("userId"),
+                        rs.getString("title"),
+                        rs.getInt("price"),
+                        rs.getString("tradeStatus"),
+                        rs.getString("ImageUrl")),
+                getProductParams);
+    }
 }
