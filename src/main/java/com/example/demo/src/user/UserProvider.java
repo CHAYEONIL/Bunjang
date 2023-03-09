@@ -108,5 +108,13 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
+    public List<GetProductRes> getProduct(int userIdx) throws BaseException{
+        try {
+            List<GetProductRes> getProductRes = userDao.getProduct(userIdx);
+            return getProductRes;
+        } catch (Exception exception){
+            logger.error("App - logIn Provider Error", exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

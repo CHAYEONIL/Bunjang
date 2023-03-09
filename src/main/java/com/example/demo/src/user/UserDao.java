@@ -124,4 +124,17 @@ public class UserDao {
                         rs.getString("userStatusCheck")),
                 getMyPageParams);
     }
+    public List<GetProductRes> getProduct(int userIdx){
+        String getProductQuery = "select P.productId, P.userId, P.title, P.price, P.tradeStatus, PI.Imageurl from Product P inner join ProductImage PI on PI.productId = P.productId where P.userId =?";
+        int getProductParams = userIdx;
+        return jdbcTemplate.query(getProductQuery,
+                (rs, rsNum) -> new GetProductRes(
+                        rs.getInt("productId"),
+                        rs.getInt("userId"),
+                        rs.getString("title"),
+                        rs.getInt("price"),
+                        rs.getString("tradeStatus"),
+                        rs.getString("ImageUrl")),
+                getProductParams);
+    }
 }

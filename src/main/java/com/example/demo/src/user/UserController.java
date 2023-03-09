@@ -157,4 +157,19 @@ public class UserController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+    /**
+     * 판매상품 API
+     * [GET] /users/:userId/sellproducts
+     * @return BaseResponse<GetMyPageRes>
+     */
+    @ResponseBody
+    @GetMapping("{userId}/sellproducts")
+    public BaseResponse<List<GetProductRes>> getProduct(@PathVariable("userId") int userId) {
+        try {
+            List<GetProductRes> getProductRes = userProvider.getProduct(userId);
+            return new BaseResponse<>(getProductRes);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }
