@@ -65,7 +65,7 @@ public class ProductController {
      * [POST]
      */
     @ResponseBody
-    @PostMapping("/{userId}")
+    @PostMapping("")
     public BaseResponse<PostProductRes> createProduct(@RequestBody PostProductReq postProductReq) {
 
         try {
