@@ -40,7 +40,8 @@ public enum BaseResponseStatus {
     // [POST] /reviews
     POST_REVIEW_EMPTY_CONTENT(false, 2023, "리뷰평을 남겨주세요"),
     /**
-     * 3000 : Response 오류
+    /**
+     *  * 3000 : Response 오류
      */
     // Common
     RESPONSE_ERROR(false, 3000, "값을 불러오는데 실패하였습니다."),

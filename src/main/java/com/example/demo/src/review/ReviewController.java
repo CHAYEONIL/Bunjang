@@ -2,6 +2,7 @@ package com.example.demo.src.review;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.review.model.GetReviewRes;
 import com.example.demo.src.review.model.PostReviewReq;
 import com.example.demo.src.review.model.PostReviewRes;
 import com.example.demo.utils.JwtService;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.POST_REVIEW_EMPTY_CONTENT;
 
@@ -46,6 +49,20 @@ public class ReviewController {
         try{
             PostReviewRes postReviewRes = reviewService.createReview(postReviewReq);
             return new BaseResponse<>(postReviewRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     * 상점 리뷰 검색 API
+     * [POST] /reviews
+     */
+    @ResponseBody
+    @GetMapping("")
+    public BaseResponse<List<GetReviewRes>> getStoreUserId(@RequestParam(value = "storeUserId") int storeUserId) {
+        try{
+            List<GetReviewRes> getReviewRes = reviewProvider.getStoreUserId(storeUserId);
+            return new BaseResponse<>(getReviewRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
