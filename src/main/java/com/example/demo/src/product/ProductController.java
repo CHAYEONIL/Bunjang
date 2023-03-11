@@ -4,6 +4,8 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.product.model.GetProductRes;
 import com.example.demo.src.product.model.GetProductsDataRes;
+import com.example.demo.src.product.model.PostProductReq;
+import com.example.demo.src.product.model.PostProductRes;
 import com.example.demo.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -57,5 +59,26 @@ public class ProductController {
         }
 
     }
+
+    /**
+     * 상품 등록 API
+     * [POST]
+     */
+    @ResponseBody
+    @PostMapping("/{userId}")
+    public BaseResponse<PostProductRes> createProduct(@RequestBody PostProductReq postProductReq) {
+
+        try {
+            int userId = jwtService.getUserIdx();
+
+            PostProductRes postProductRes = productService.createProduct(userId, postProductReq);
+            return new BaseResponse<>(postProductRes);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+
+    }
+
+
 
 }

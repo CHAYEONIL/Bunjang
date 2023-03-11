@@ -160,5 +160,44 @@ public class ProductDao {
                 ,getUserParams);
     }
 
+    /**
+     * 상품 생성
+     * @param userId
+     * @param postProductReq
+     * @return
+     */
+    public int createProduct(int userId, PostProductReq postProductReq) {
+        String createProductQuery = "insert into Product (" +
+                "userId, " +
+                "title, " +
+                "category, " +
+                "location, " +
+                "productStatus, " +
+                "isChangable, " +
+                "quantity, " +
+                "price, " +
+                "isFreeShip, " +
+                "contents, " +
+                "isSagePay) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        Object[] createdProductParams = new Object[] {userId, postProductReq.getTitle(), postProductReq.getCategory(), postProductReq.getLocation(), postProductReq.getProductStatus(), postProductReq.getIsChangable(), postProductReq.getQuantity(), postProductReq.getPrice(), postProductReq.getIsFreeShip(), postProductReq.getContents(), postProductReq.getIsSagePay()};
+
+
+        this.jdbcTemplate.update(createProductQuery, createdProductParams);
+        String lastInsertIdQuery  = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+
+    }
+
+    public int createProductImage(int productId, PostProductImageReq postProductImageReq) {
+        String createProductImageQuery = "insert into ProductImage (productId, imageUrl) VALUES (?,?)";
+        Object[] createProductImageParams = new Object[]{productId, postProductImageReq.getImageUrl()};
+
+        this.jdbcTemplate.update(createProductImageQuery, createProductImageParams);
+        String lastInsertIdQuery  = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+
+    }
+
 
 }
