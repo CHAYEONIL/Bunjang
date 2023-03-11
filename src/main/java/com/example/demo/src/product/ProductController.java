@@ -2,10 +2,7 @@ package com.example.demo.src.product;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.product.model.GetProductRes;
-import com.example.demo.src.product.model.GetProductsDataRes;
-import com.example.demo.src.product.model.PostProductReq;
-import com.example.demo.src.product.model.PostProductRes;
+import com.example.demo.src.product.model.*;
 import com.example.demo.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -77,6 +74,26 @@ public class ProductController {
             return new BaseResponse<>(e.getStatus());
         }
 
+    }
+
+    /**
+     * 상품 수정 API
+     * @param productId
+     * @param patchProductReq
+     * @return
+     */
+    @ResponseBody
+    @PatchMapping("/{productId}")
+    public BaseResponse<String> modifyProduct(@PathVariable("productId") int productId, @RequestBody PatchProductReq patchProductReq) {
+        try {
+            int userIdxJwt = jwtService.getUserIdx();
+            productService.modifyProduct(userIdxJwt, productId, patchProductReq);
+            String result = "상품이 수정되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException e) {
+            System.out.println(e);
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 
 

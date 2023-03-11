@@ -199,5 +199,19 @@ public class ProductDao {
 
     }
 
+    /**
+     * 상품 수정
+     * @param patchProductReq
+     * @param productId
+     * @return
+     */
+    public int modifyProduct(PatchProductReq patchProductReq, int productId) {
+        String updateProductQuery = "UPDATE Product\n" +
+                "SET title = ?, category = ?, location = ?, productStatus = ?, isChangable = ?, quantity = ?, price = ?, isFreeShip = ?, contents = ?, isSagePay = ?\n" +
+                "WHERE productId = ?";
+        Object[] updateProductParams = new Object[]{patchProductReq.getTitle(), patchProductReq.getCategory(), patchProductReq.getLocation(), patchProductReq.getProductStatus(), patchProductReq.getIsChangable(), patchProductReq.getQuantity(), patchProductReq.getPrice(), patchProductReq.getIsFreeShip(), patchProductReq.getContents(), patchProductReq.getIsSagePay(), productId};
+        return this.jdbcTemplate.update(updateProductQuery, updateProductParams);
+    }
+
 
 }
