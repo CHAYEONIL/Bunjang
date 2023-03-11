@@ -1,8 +1,6 @@
 package com.example.demo.src.product;
 
-import com.example.demo.src.product.model.GetProductsDataRes;
-import com.example.demo.src.product.model.GetProductsImgRes;
-import com.example.demo.src.product.model.GetProductsLikeRes;
+import com.example.demo.src.product.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -36,7 +34,7 @@ public class ProductDao {
      * @param productId
      * @return
      */
-    public List<GetProductsDataRes> getProduct(int productId) {
+    public GetProductsDataRes getProduct(int productId) {
         String getProductQuery = "select P.productId, P.userId, P.title, P.category, IFNULL(location, '지역정보 없음'), P.productStatus, P.isChangable, P.quantity, P.price, P.isFreeShip, P.contents, P.isSagePay, P.tradeStatus, P.updatedAt,\n" +
                 "                        case when TIMESTAMPDIFF(SECOND, P.updatedAt,CURRENT_TIMESTAMP)<60\n" +
                 "                        then concat(TIMESTAMPDIFF(SECOND, P.updatedAt,CURRENT_TIMESTAMP),'초 전')\n" +
@@ -58,7 +56,7 @@ public class ProductDao {
         String getProductLikeQuery = "select count(*) as likes from `Like` where productId=?";
         String getProductImgQuery = "select PI.productId, PI.imageUrl from ProductImage PI where productId=?";
 
-        return this.jdbcTemplate.query(getProductQuery,
+        return this.jdbcTemplate.queryForObject(getProductQuery,
                 (rs, rowNum) -> new GetProductsDataRes(
                         rs.getInt("productId"),
                         rs.getInt("userId"),
@@ -84,4 +82,83 @@ public class ProductDao {
                                 rs.getInt("productId"))), getProductParams);
 
     }
+
+    public GetUserDataRes getUserData(int userId) {
+
+        int getUserParams = userId;
+        String getUserDataQuery = "select ROUND(AVG(R.score), 1) as score, U.userNickName, U.profileImageUrl\n" +
+                "from User U \n" +
+                "inner join Product P on U.userId = P.userId\n" +
+                "left join Review R on U.userId = R.purchaseUserId\n" +
+                "where P.userId=?";
+
+        return this.jdbcTemplate.queryForObject(getUserDataQuery,
+                (rs, rowNum) -> new GetUserDataRes(
+                        rs.getDouble("score"),
+                        rs.getString("profileImageUrl"),
+                        rs.getString("userNickName")),getUserParams
+
+                );
+    }
+
+
+    public List<GetUserProductsRes> getUserProducts(int userId) {
+        String getUserQuery = "select *,\n" +
+                "(select COUNT(*) from `Like` L where L.userId = P.userId and L.productId = P.productId) as productLike\n" +
+                "from Product P\n" +
+                "left join User U on P.userId = U.userId \n" +
+                "left join `Like` L on P.productId = L.productId and U.userId = L.userId \n" +
+                "where P.userId=? and P.status='ACTIVE'";
+        int getUserParams = userId;
+        String getProductImgQuery = "select * from ProductImage PI left join Product P on P.productId = PI.productId where P.productId=? and P.status='ACTIVE'";
+
+        return this.jdbcTemplate.query(getUserQuery,
+                (rs, rowNum)->new GetUserProductsRes(
+                        rs.getInt("productId"),
+                        rs.getInt("userId"),
+                        rs.getString("title"),
+                        rs.getString("price"),
+                        rs.getInt("productLike"),
+                        rs.getInt("likeId"),
+                        getProductsImgRes = this.jdbcTemplate.query(getProductImgQuery,
+                                (rk, rowNum1) -> new GetProductsImgRes(
+                                        rk.getInt("productId"),
+                                        rk.getString("imageUrl")),
+                                rs.getInt("productId"))), getUserParams
+                                );
+
+
+    }
+
+    public List<GetUserReviewRes> getUserReview(int userId) {
+        int getUserParams = userId;
+        String getUserReviewQuery = "select *, \n" +
+                "                        case when TIMESTAMPDIFF(SECOND, R.updatedAt,CURRENT_TIMESTAMP)<60\n" +
+                "                        then concat(TIMESTAMPDIFF(SECOND, R.updatedAt,CURRENT_TIMESTAMP),'초 전')\n" +
+                "                        when TIMESTAMPDIFF(MINUTE , R.updatedAt,CURRENT_TIMESTAMP)<60\n" +
+                "                        then concat(TIMESTAMPDIFF(MINUTE , R.updatedAt,CURRENT_TIMESTAMP),'분 전')\n" +
+                "                        when TIMESTAMPDIFF(HOUR , R.updatedAt,CURRENT_TIMESTAMP)<24\n" +
+                "                        then concat(TIMESTAMPDIFF(HOUR , R.updatedAt,CURRENT_TIMESTAMP),'시간 전')\n" +
+                "                        when TIMESTAMPDIFF(DAY , R.updatedAt,CURRENT_TIMESTAMP)<30\n" +
+                "                        then concat(TIMESTAMPDIFF(DAY , R.updatedAt,CURRENT_TIMESTAMP),'일 전')\n" +
+                "                        when TIMESTAMPDIFF(MONTH ,R.updatedAt,CURRENT_TIMESTAMP) < 12\n" +
+                "                        then concat(TIMESTAMPDIFF(MONTH ,R.updatedAt,CURRENT_TIMESTAMP), '달 전')\n" +
+                "                        else concat(TIMESTAMPDIFF(YEAR,R.updatedAt,CURRENT_TIMESTAMP), '년 전')\n" +
+                "                        end AS reviewUpdatedAtTime\n" +
+                "from Review R inner join User U on R.purchaseUserId = U.userId\n" +
+                "inner join Product P on U.userId = P.userId\n" +
+                "where storeUserId=? group by reviewId";
+
+        return this.jdbcTemplate.query(getUserReviewQuery,
+                (rm, rowNum) -> new GetUserReviewRes(
+                        rm.getInt("productId"),
+                        rm.getInt("purchaseUserId"),
+                        rm.getString("content"),
+                        rm.getDouble("score"),
+                        rm.getString("createdAt"),
+                        rm.getString("reviewUpdatedAtTime"))
+                ,getUserParams);
+    }
+
+
 }
