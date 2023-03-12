@@ -1,7 +1,9 @@
 package com.example.demo.src.review;
 
 import com.example.demo.src.review.model.GetReviewRes;
+import com.example.demo.src.review.model.PatchReviewReq;
 import com.example.demo.src.review.model.PostReviewReq;
+import com.example.demo.src.user.model.PatchUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -38,5 +40,11 @@ public class ReviewDao {
                         rs.getDouble("score"),
                         rs.getString("content")),
                 getUserParams);
+    }
+    public int modifyReview(PatchReviewReq patchReviewReq){
+        String modifyReviewQuery = "update Review set score =?, content =? where reviewId = ? ";
+        Object[] modifyReviewParams = new Object[]{patchReviewReq.getScore(), patchReviewReq.getContent(), patchReviewReq.getReviewId()};
+
+        return this.jdbcTemplate.update(modifyReviewQuery,modifyReviewParams);
     }
 }
