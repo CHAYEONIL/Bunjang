@@ -213,5 +213,17 @@ public class ProductDao {
         return this.jdbcTemplate.update(updateProductQuery, updateProductParams);
     }
 
+    /**
+     * 상품 삭제
+     * @param productId
+     * @return
+     */
+    public int deleteProduct(int productId) {
+        String deleteProductQuery = "UPDATE Product SET status = 'DELETED' WHERE productId = ?";
+        int deleteProductParams = productId;
+
+        return this.jdbcTemplate.update(deleteProductQuery, deleteProductParams);
+    }
+
 
 }

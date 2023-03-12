@@ -96,6 +96,23 @@ public class ProductController {
         }
     }
 
+    /**
+     * 상품 삭제 API
+     * @param productId
+     * @return
+     */
+    @ResponseBody
+    @PatchMapping("/{productId}/status")
+    public BaseResponse<String> deleteProduct(@PathVariable("productId") int productId) {
+        try {
+            productService.deleteProduct(productId);
+            String result = "상품이 삭제되었습니다";
+            return new BaseResponse<>(result);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
 
 
 }
