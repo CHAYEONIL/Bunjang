@@ -89,7 +89,7 @@ public class ReviewController {
      * [POST] /reviews/:reviewId/status
      */
     @ResponseBody
-    @PatchMapping("/{reviewId}")
+    @PatchMapping("/{reviewId}/status")
     public BaseResponse<String> modifyReviewstatus(@PathVariable("reviewId") int reviewId, @RequestBody Review review){
         try {
             //같다면 유저네임 변경

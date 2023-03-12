@@ -2,6 +2,7 @@ package com.example.demo.src.review;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.review.model.PatchReviewReq;
+import com.example.demo.src.review.model.PatchReviewStatusReq;
 import com.example.demo.src.review.model.PostReviewReq;
 import com.example.demo.src.review.model.PostReviewRes;
 import com.example.demo.utils.JwtService;
@@ -37,6 +38,17 @@ public class ReviewService {
     public void modifyReview(PatchReviewReq patchReviewReq) throws BaseException {
         try {
             int result = reviewDao.modifyReview(patchReviewReq);
+            if (result == 0) {
+                throw new BaseException(MODIFY_FAIL_ID);
+            }
+        } catch (Exception exception) {
+            logger.error("App - modifyUserName Service Error", exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+    public void modifyReviewStatus(PatchReviewStatusReq patchReviewStatusReq) throws BaseException {
+        try {
+            int result = reviewDao.modifyReviewStatus(patchReviewStatusReq);
             if (result == 0) {
                 throw new BaseException(MODIFY_FAIL_ID);
             }
