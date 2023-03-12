@@ -225,5 +225,26 @@ public class ProductDao {
         return this.jdbcTemplate.update(deleteProductQuery, deleteProductParams);
     }
 
+    /**
+     * 상품 검색
+     * @param title
+     * @return
+     */
+    public List<GetProductSearchRes> getSearchProducts(String title) {
+
+        String getProductSearchQuery = "select P.productId, P.title, P.price, P.isSagePay, (select PI.imageUrl from ProductImage PI where P.productId = PI.productId limit 1) " +
+                "from Product P " +
+                "where P.title like '%" + title + "%' ";
+
+        return this.jdbcTemplate.query(getProductSearchQuery,
+                (rs, rowNum) -> new GetProductSearchRes(
+                        rs.getInt("productId"),
+                        rs.getString("title"),
+                        rs.getString("price"),
+                        rs.getString("isSagePay"),
+                        rs.getString("imageUrl")
+                ));
+    }
+
 
 }

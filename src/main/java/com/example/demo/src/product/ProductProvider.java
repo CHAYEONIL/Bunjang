@@ -79,4 +79,20 @@ public class ProductProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    /**
+     * 상품 검색
+     * @param title
+     * @return
+     * @throws BaseException
+     */
+    public List<GetProductSearchRes> getSearchProducts(String title) throws BaseException {
+        try {
+            List<GetProductSearchRes> getProductSearchRes = productDao.getSearchProducts(title);
+            return getProductSearchRes;
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

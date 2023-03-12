@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/products")
@@ -109,6 +111,23 @@ public class ProductController {
             String result = "상품이 삭제되었습니다";
             return new BaseResponse<>(result);
         } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /**
+     * 상품 검색 API
+     * @param title
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("")
+    public BaseResponse<List<GetProductSearchRes>> getQueryProducts(@RequestParam String title) {
+        try {
+            List<GetProductSearchRes> getProductSearchRes = productProvider.getSearchProducts(title);
+            return new BaseResponse<>(getProductSearchRes);
+        } catch (BaseException e) {
+            System.out.println(e);
             return new BaseResponse<>(e.getStatus());
         }
     }
