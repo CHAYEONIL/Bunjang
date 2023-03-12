@@ -246,5 +246,26 @@ public class ProductDao {
                 ));
     }
 
+    /**
+     * 상품 카테고리 별 검색 API
+     * @param category
+     * @return
+     */
+    public List<GetProductSearchRes> getSearchCateProducts(String category) {
+
+        String getCateProductSearchQuery = "select P.productId, P.title, P.price, P.isSagePay, (select PI.imageUrl from ProductImage PI where P.productId = PI.productId limit 1) as imageUrl " +
+                "from Product P " +
+                "where P.category like '%" + category + "%' ";
+
+        return this.jdbcTemplate.query(getCateProductSearchQuery,
+                (rs, rowNum) -> new GetProductSearchRes(
+                        rs.getInt("productId"),
+                        rs.getString("title"),
+                        rs.getString("price"),
+                        rs.getString("isSagePay"),
+                        rs.getString("imageUrl")
+                ));
+    }
+
 
 }

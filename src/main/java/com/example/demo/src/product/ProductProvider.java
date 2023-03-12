@@ -95,4 +95,20 @@ public class ProductProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    /**
+     * 상품 카테고리별 검색
+     * @param category
+     * @return
+     * @throws BaseException
+     */
+    public List<GetProductSearchRes> getSearchCateProducts(String category) throws BaseException {
+        try {
+            List<GetProductSearchRes> getProductSearchRes = productDao.getSearchCateProducts(category);
+            return getProductSearchRes;
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

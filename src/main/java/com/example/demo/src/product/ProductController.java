@@ -132,6 +132,23 @@ public class ProductController {
         }
     }
 
+    /**
+     * 상품 카테고리별 검색 API
+     * @param category
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("category")
+    public BaseResponse<List<GetProductSearchRes>> getSearchCateProducts(@RequestParam String category) {
+        try {
+            List<GetProductSearchRes> getCateProductSearchRes = productProvider.getSearchCateProducts(category);
+            return new BaseResponse<>(getCateProductSearchRes);
+        } catch (BaseException e) {
+            System.out.println(e);
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
 
 
 }
