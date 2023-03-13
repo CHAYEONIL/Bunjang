@@ -3,6 +3,8 @@ package com.example.demo.src.like;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.like.model.GetLikeRes;
+import com.example.demo.src.like.model.PostLikeReq;
+import com.example.demo.src.like.model.PostLikeRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +43,21 @@ public class LikeController {
         try{
             List<GetLikeRes> getLikeRes = likeProvider.getUserId(userId);
             return new BaseResponse<>(getLikeRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     * 찜추가 API
+     * [POST] /likes
+     */
+    // Body
+    @ResponseBody
+    @PostMapping("")
+    public BaseResponse<PostLikeRes> createLike(@RequestBody PostLikeReq postLikeReq) {
+        try{
+            PostLikeRes postLikeRes = likeService.createLike(postLikeReq);
+            return new BaseResponse<>(postLikeRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
