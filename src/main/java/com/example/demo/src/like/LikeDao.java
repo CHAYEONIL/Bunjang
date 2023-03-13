@@ -1,9 +1,8 @@
 package com.example.demo.src.like;
 
 import com.example.demo.src.like.model.GetLikeRes;
+import com.example.demo.src.like.model.PatchLikeStatusReq;
 import com.example.demo.src.like.model.PostLikeReq;
-import com.example.demo.src.review.model.GetReviewRes;
-import com.example.demo.src.review.model.PostReviewReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -37,5 +36,12 @@ public class LikeDao {
 
         String lastInserIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
+    }
+
+    public int modifyLikeStatus(PatchLikeStatusReq patchLikeStatusReq){
+        String modifyLikeQuery = "update 14_TEST.Like set status =? where likeId = ? ";
+        Object[] modifyLikeParams = new Object[]{patchLikeStatusReq.getStatus(), patchLikeStatusReq.getLikeId()};
+
+        return this.jdbcTemplate.update(modifyLikeQuery,modifyLikeParams);
     }
 }

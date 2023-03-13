@@ -2,7 +2,6 @@ package com.example.demo.src.like;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.like.model.GetLikeRes;
-import com.example.demo.src.review.model.GetReviewRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

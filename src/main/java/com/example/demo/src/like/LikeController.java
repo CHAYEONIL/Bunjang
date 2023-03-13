@@ -2,9 +2,7 @@ package com.example.demo.src.like;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.like.model.GetLikeRes;
-import com.example.demo.src.like.model.PostLikeReq;
-import com.example.demo.src.like.model.PostLikeRes;
+import com.example.demo.src.like.model.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +57,25 @@ public class LikeController {
             PostLikeRes postLikeRes = likeService.createLike(postLikeReq);
             return new BaseResponse<>(postLikeRes);
         } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 찜삭제 API
+     * [PATCH] /likes/:likeId/status
+     */
+    @ResponseBody
+    @PatchMapping("/{likeId}/status")
+    public BaseResponse<String> modifyLikestatus(@PathVariable("likeId") int likeId, @RequestBody Like like){
+        try {
+            //같다면 유저네임 변경
+            PatchLikeStatusReq patchLikeStatusReq = new PatchLikeStatusReq(likeId, like.getStatus());
+            likeService.modifyLikeStatus(patchLikeStatusReq);
+
+            String result = "수정이 완료되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
