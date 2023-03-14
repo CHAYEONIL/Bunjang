@@ -68,8 +68,23 @@ public class ProductController {
      * [POST]
      */
     @ResponseBody
-    @PostMapping("")
+    @PostMapping("/")
     public BaseResponse<PostProductRes> createProduct(@RequestBody PostProductReq postProductReq) {
+
+        /*제품 설명 유효성 검사*/
+        if (postProductReq.getContents().length() < 10) {
+            return new BaseResponse<>(POST_GOODS_LACK_CONTENT);
+        }
+
+        /*제품 제목 유효성 검사*/
+        if (postProductReq.getTitle().length() < 2) {
+            return new BaseResponse<>(POST_GOODS_LACK_NAME);
+        }
+
+        /*제품 가격 유효성 검사*/
+        if (Integer.parseInt(postProductReq.getPrice()) <= 0) {
+            return new BaseResponse<>(POST_GOODS_EMPTY_PRICE);
+        }
 
         try {
             int userId = jwtService.getUserIdx();
