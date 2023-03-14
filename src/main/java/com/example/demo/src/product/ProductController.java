@@ -35,6 +35,8 @@ public class ProductController {
     public BaseResponse<GetProductsDataRes> getProducts(@PathVariable("productId") int productId) {
 
         try{
+            int userIdByJwt = jwtService.getUserIdx();
+            
             GetProductsDataRes getProductsDataRes = productProvider.getProductData(productId);
             return new BaseResponse<>(getProductsDataRes);
         } catch (BaseException e) {
@@ -50,6 +52,8 @@ public class ProductController {
     @GetMapping("/{productId}/storeinfo")
     public BaseResponse<GetProductRes> getUsers(@PathVariable("productId") int productId) {
         try {
+            int userIdByJwt = jwtService.getUserIdx();
+            
             GetProductRes getProductRes = productProvider.getProductUserData(productId);
             return new BaseResponse<>(getProductRes);
         } catch (BaseException e) {
@@ -107,6 +111,8 @@ public class ProductController {
     @PatchMapping("/{productId}/status")
     public BaseResponse<String> deleteProduct(@PathVariable("productId") int productId) {
         try {
+            int userIdByJwt = jwtService.getUserIdx();
+            
             productService.deleteProduct(productId);
             String result = "상품이 삭제되었습니다";
             return new BaseResponse<>(result);
@@ -124,6 +130,8 @@ public class ProductController {
     @GetMapping("")
     public BaseResponse<List<GetProductSearchRes>> getQueryProducts(@RequestParam String title) {
         try {
+            int userIdByJwt = jwtService.getUserIdx();
+            
             List<GetProductSearchRes> getProductSearchRes = productProvider.getSearchProducts(title);
             return new BaseResponse<>(getProductSearchRes);
         } catch (BaseException e) {
@@ -141,6 +149,8 @@ public class ProductController {
     @GetMapping("category")
     public BaseResponse<List<GetProductSearchRes>> getSearchCateProducts(@RequestParam String category) {
         try {
+            int userIdByJwt = jwtService.getUserIdx();
+            
             List<GetProductSearchRes> getCateProductSearchRes = productProvider.getSearchCateProducts(category);
             return new BaseResponse<>(getCateProductSearchRes);
         } catch (BaseException e) {
