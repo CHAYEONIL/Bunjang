@@ -40,6 +40,8 @@ public class AnnouncementController {
     @GetMapping("")
     public BaseResponse<List<GetAnnouncementsRes>> getAnnouncements() {
         try {
+            int userIdByJwt = jwtService.getUserIdx();
+            
             List<GetAnnouncementsRes> getAnnouncementsRes = announcementProvider.getAnnouncements();
             return new BaseResponse<>(getAnnouncementsRes);
         } catch (BaseException e) {
@@ -52,6 +54,8 @@ public class AnnouncementController {
     public BaseResponse<GetAnnouncementRes> getAnnouncement(@PathVariable("announcementId") int announcementId) {
 
         try {
+            int userIdByJwt = jwtService.getUserIdx();
+            
             GetAnnouncementRes getAnnouncementRes = announcementProvider.getAnnouncement(announcementId);
             return new BaseResponse<>(getAnnouncementRes);
         } catch (BaseException e) {
