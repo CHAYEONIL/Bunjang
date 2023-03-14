@@ -42,6 +42,12 @@ public enum BaseResponseStatus {
     */
     PRODUCT_NOT_EXIST(false, 2024, "존재하지 않는 상품입니다."),
     
+        // [POST] /products
+    POST_GOODS_LACK_CONTENT(false, 2031, "상품에 대해 더 자세히 적어주세요."),
+    POST_GOODS_LACK_NAME(false, 2032, "상품의 제목을 더 정확히 입력해주세요."),
+    POST_GOODS_EMPTY_PRICE(false, 2033, "상품의 가격을 입력해주세요."),
+    
+    
     // [POST] /addresses
     POST_ADDRESS_EMPTY_ADDRESS_NAME(false, 2025, "주소 이름을 입력해주세요."),
     POST_ADDRESS_EMPTY_PHONENUM(false, 2026, "휴대폰 번호를 입력해주세요"),
