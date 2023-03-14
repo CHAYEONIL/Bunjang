@@ -4,6 +4,7 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.qna.model.GetQnaIdRes;
 import com.example.demo.src.qna.model.GetQnaRes;
+import com.example.demo.src.review.model.GetReviewRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +54,21 @@ public class QnaController {
             return new BaseResponse<>(getQnaIdRes);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 카테고리 검색 API
+     * [GET] /qnas?category={category}
+     */
+    @ResponseBody
+    @GetMapping("category")
+    public BaseResponse<List<GetQnaRes>> getCategory(@RequestParam(value = "category") String category) {
+        try{
+            List<GetQnaRes> getQnaRes = qnaProvider.getCategory(category);
+            return new BaseResponse<>(getQnaRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 }

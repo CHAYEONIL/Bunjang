@@ -4,6 +4,7 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.qna.model.GetQnaIdRes;
 import com.example.demo.src.qna.model.GetQnaRes;
+import com.example.demo.src.review.model.GetReviewRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,16 @@ public class QnaProvider {
             return getQnaIdRes;
         } catch (Exception exception){
             logger.error("App - logIn Provider Error", exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+    public List<GetQnaRes> getCategory(String category) throws BaseException {
+        try{
+            List<GetQnaRes> getQnaRes = qnaDao.getCategory(category);
+            return getQnaRes;
+        }
+        catch (Exception exception) {
+            logger.error("App - getUserRes Provider Error", exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
