@@ -2,6 +2,7 @@ package com.example.demo.src.qna;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponseStatus;
+import com.example.demo.src.qna.model.GetQnaIdRes;
 import com.example.demo.src.qna.model.GetQnaRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
 @Service
 public class QnaProvider {
@@ -31,5 +34,13 @@ public class QnaProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
-
+    public GetQnaIdRes getQnaId(int questionId) throws BaseException{
+        try {
+            GetQnaIdRes getQnaIdRes = qnaDao.getQnaId(questionId);
+            return getQnaIdRes;
+        } catch (Exception exception){
+            logger.error("App - logIn Provider Error", exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
