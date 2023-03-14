@@ -40,7 +40,18 @@ public enum BaseResponseStatus {
     /**
      * /products
     */
-    PRODUCT_NOT_EXIST(false, 2018, "존재하지 않는 상품입니다."),
+    PRODUCT_NOT_EXIST(false, 2024, "존재하지 않는 상품입니다."),
+    
+    // [POST] /addresses
+    POST_ADDRESS_EMPTY_ADDRESS_NAME(false, 2025, "주소 이름을 입력해주세요."),
+    POST_ADDRESS_EMPTY_PHONENUM(false, 2026, "휴대폰 번호를 입력해주세요"),
+    POST_ADDRESS_INVALID_PHONENUM(false, 2027, "휴대폰 번호를 정확히 입력해 주세요"),
+    POST_ADDRESS_EMPTY_ADDRESS(false, 2028, "주소를 입력해 주세요."),
+    POST_ADDRESS_EMPTY_ADDRESSDETAIL(false, 2029, "상세 주소를 입력해 주세요."),
+
+    // [PATCH] /address/:addressId
+    MODIFY_FAIL_ADDRESS(false, 2030, "주소를 수정하는데 실패하였습니다."),
+
 
     /**
      * 3000 : Response 오류
