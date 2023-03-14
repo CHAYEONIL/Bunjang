@@ -66,6 +66,8 @@ public class OrderController {
     @PatchMapping("{orderId}/status")
     public BaseResponse<String> deleteOrder(@PathVariable("orderId") int orderId) {
         try {
+            int userIdByJwt = jwtService.getUserIdx();
+            
             orderService.deleteOrder(orderId);
             String result = "주문이 취소되었습니다.";
             return new BaseResponse<>(result);
