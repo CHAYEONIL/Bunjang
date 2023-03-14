@@ -232,9 +232,9 @@ public class ProductDao {
      */
     public List<GetProductSearchRes> getSearchProducts(String title) {
 
-        String getProductSearchQuery = "select P.productId, P.title, P.price, P.isSagePay, (select PI.imageUrl from ProductImage PI where P.productId = PI.productId limit 1) " +
+        String getProductSearchQuery = "select P.productId, P.title, P.price, P.isSagePay, (select PI.imageUrl from ProductImage PI where P.productId = PI.productId limit 1) as imageUrl  " +
                 "from Product P " +
-                "where P.title like '%" + title + "%' ";
+                "where P.title like '%" + title + "%' " + "ORDER BY P.updatedAt ASC";
 
         return this.jdbcTemplate.query(getProductSearchQuery,
                 (rs, rowNum) -> new GetProductSearchRes(
@@ -255,7 +255,7 @@ public class ProductDao {
 
         String getCateProductSearchQuery = "select P.productId, P.title, P.price, P.isSagePay, (select PI.imageUrl from ProductImage PI where P.productId = PI.productId limit 1) as imageUrl " +
                 "from Product P " +
-                "where P.category like '%" + category + "%' ";
+                "where P.category like '%" + category + "%' " + " ORDER BY P.updatedAt ASC";
 
         return this.jdbcTemplate.query(getCateProductSearchQuery,
                 (rs, rowNum) -> new GetProductSearchRes(
