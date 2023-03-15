@@ -37,19 +37,16 @@ public class HomeDao {
 
     }
 
+    
     /**
      * 홈 화면 상품
      */
     public List<GetProductsRes> getHomeProducts() {
         String getProductsQuery =
-                "select P.productId, P.price, P.title, P.isSagePay, P.tradeStatus, P.status\n" +
+                "select P.productId, P.price, P.title, P.isSagePay, P.tradeStatus, P.status, (select PI.imageUrl from ProductImage PI where PI.status = 'ACTIVE' and P.productId = PI.productId limit 1) as imageUrl \n" +
                         "from Product P\n" +
-                        "left join ProductImage PI on P.productId = PI.productId\n" +
-                        "where P.tradeStatus = 'Available' and P.status = 'Y' and PI.status = 'Y'";
+                        "where P.tradeStatus = 'Available' and P.status = 'ACTIVE'";
 
-        String getProductImgQuery = "select PI.productImgUrlId, PI.imageUrl " +
-                "from ProductImage PI " +
-                "inner join Product P on PI.productId = P.productId where P.productId=? and PI.status='Y' ";
         return this.jdbcTemplate.query(getProductsQuery,
                 (rs, rowNum) -> new GetProductsRes(
                         rs.getInt("productId"),
@@ -58,10 +55,8 @@ public class HomeDao {
                         rs.getString("isSagePay"),
                         rs.getString("tradeStatus"),
                         rs.getString("status"),
-                        getProductImgRes = this.jdbcTemplate.query(getProductImgQuery,
-                                (rk, rownum)->new GetProductImgRes(rk.getInt("productImgUrlId"),
-                                        rk.getString("imageUrl")), rs.getInt("productId")
-                        )));
+                        rs.getString("imageUrl")
+                ));
 
     }
 }

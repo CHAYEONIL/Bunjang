@@ -35,7 +35,8 @@ public class ProductDao {
      * @return
      */
     public GetProductsDataRes getProduct(int productId) {
-        String getProductQuery = "select P.productId, P.userId, P.title, P.category, IFNULL(location, '지역정보 없음'), P.productStatus, P.isChangable, P.quantity, P.price, P.isFreeShip, P.contents, P.isSagePay, P.tradeStatus, P.updatedAt,\n" +
+        String getProductQuery = "select P.productId, P.userId, P.title, P.category, IFNULL(location, '지역정보 없음'), P.productStatus, P.isChangable, P.quantity, P.price, P.isFreeShip, P.contents, P.isSagePay, P.tradeStatus, P.updatedAt, " +
+
                 "                        case when TIMESTAMPDIFF(SECOND, P.updatedAt,CURRENT_TIMESTAMP)<60\n" +
                 "                        then concat(TIMESTAMPDIFF(SECOND, P.updatedAt,CURRENT_TIMESTAMP),'초 전')\n" +
                 "                        when TIMESTAMPDIFF(MINUTE , P.updatedAt,CURRENT_TIMESTAMP)<60\n" +
@@ -82,6 +83,7 @@ public class ProductDao {
                                 rs.getInt("productId"))), getProductParams);
 
     }
+    
 
     public GetUserDataRes getUserData(int userId) {
 
@@ -199,6 +201,7 @@ public class ProductDao {
 
     }
 
+
     /**
      * 상품 수정
      * @param patchProductReq
@@ -213,5 +216,57 @@ public class ProductDao {
         return this.jdbcTemplate.update(updateProductQuery, updateProductParams);
     }
 
+    /**
+     * 상품 삭제
+     * @param productId
+     * @return
+     */
+    public int deleteProduct(int productId) {
+        String deleteProductQuery = "UPDATE Product SET status = 'DELETED' WHERE productId = ?";
+        int deleteProductParams = productId;
 
+        return this.jdbcTemplate.update(deleteProductQuery, deleteProductParams);
+    }
+
+    /**
+     * 상품 검색
+     * @param title
+     * @return
+     */
+    public List<GetProductSearchRes> getSearchProducts(String title) {
+
+        String getProductSearchQuery = "select P.productId, P.title, P.price, P.isSagePay, (select PI.imageUrl from ProductImage PI where P.productId = PI.productId limit 1) as imageUrl  " +
+                "from Product P " +
+                "where P.title like '%" + title + "%' " + "ORDER BY P.updatedAt ASC";
+
+        return this.jdbcTemplate.query(getProductSearchQuery,
+                (rs, rowNum) -> new GetProductSearchRes(
+                        rs.getInt("productId"),
+                        rs.getString("title"),
+                        rs.getString("price"),
+                        rs.getString("isSagePay"),
+                        rs.getString("imageUrl")
+                ));
+    }
+
+    /**
+     * 상품 카테고리 별 검색 API
+     * @param category
+     * @return
+     */
+    public List<GetProductSearchRes> getSearchCateProducts(String category) {
+
+        String getCateProductSearchQuery = "select P.productId, P.title, P.price, P.isSagePay, (select PI.imageUrl from ProductImage PI where P.productId = PI.productId limit 1) as imageUrl " +
+                "from Product P " +
+                "where P.category like '%" + category + "%' " + " ORDER BY P.updatedAt ASC";
+
+        return this.jdbcTemplate.query(getCateProductSearchQuery,
+                (rs, rowNum) -> new GetProductSearchRes(
+                        rs.getInt("productId"),
+                        rs.getString("title"),
+                        rs.getString("price"),
+                        rs.getString("isSagePay"),
+                        rs.getString("imageUrl")
+                ));
+    }
 }

@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/products")
@@ -33,6 +35,8 @@ public class ProductController {
     public BaseResponse<GetProductsDataRes> getProducts(@PathVariable("productId") int productId) {
 
         try{
+            int userIdByJwt = jwtService.getUserIdx();
+            
             GetProductsDataRes getProductsDataRes = productProvider.getProductData(productId);
             return new BaseResponse<>(getProductsDataRes);
         } catch (BaseException e) {
@@ -48,6 +52,8 @@ public class ProductController {
     @GetMapping("/{productId}/storeinfo")
     public BaseResponse<GetProductRes> getUsers(@PathVariable("productId") int productId) {
         try {
+            int userIdByJwt = jwtService.getUserIdx();
+            
             GetProductRes getProductRes = productProvider.getProductUserData(productId);
             return new BaseResponse<>(getProductRes);
         } catch (BaseException e) {
@@ -105,6 +111,63 @@ public class ProductController {
             productService.modifyProduct(userIdxJwt, productId, patchProductReq);
             String result = "상품이 수정되었습니다.";
             return new BaseResponse<>(result);
+        } catch (BaseException e) {
+            System.out.println(e);
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /**
+     * 상품 삭제 API
+     * @param productId
+     * @return
+     */
+    @ResponseBody
+    @PatchMapping("/{productId}/status")
+    public BaseResponse<String> deleteProduct(@PathVariable("productId") int productId) {
+        try {
+            int userIdByJwt = jwtService.getUserIdx();
+            
+            productService.deleteProduct(productId);
+            String result = "상품이 삭제되었습니다";
+            return new BaseResponse<>(result);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /**
+     * 상품 검색 API
+     * @param title
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("")
+    public BaseResponse<List<GetProductSearchRes>> getQueryProducts(@RequestParam String title) {
+        try {
+            int userIdByJwt = jwtService.getUserIdx();
+            
+            List<GetProductSearchRes> getProductSearchRes = productProvider.getSearchProducts(title);
+            return new BaseResponse<>(getProductSearchRes);
+        } catch (BaseException e) {
+            System.out.println(e);
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /**
+     * 상품 카테고리별 검색 API
+     * @param category
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("category")
+    public BaseResponse<List<GetProductSearchRes>> getSearchCateProducts(@RequestParam String category) {
+        try {
+            int userIdByJwt = jwtService.getUserIdx();
+            
+            List<GetProductSearchRes> getCateProductSearchRes = productProvider.getSearchCateProducts(category);
+            return new BaseResponse<>(getCateProductSearchRes);
         } catch (BaseException e) {
             System.out.println(e);
             return new BaseResponse<>(e.getStatus());

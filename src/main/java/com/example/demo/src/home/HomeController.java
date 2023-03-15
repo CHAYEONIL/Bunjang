@@ -39,6 +39,8 @@ public class HomeController {
     public BaseResponse<List<GetBannerRes>> getBanner() {
 
         try {
+            int userIdByJwt = jwtService.getUserIdx();
+            
             List<GetBannerRes> getBannerRes = homeProvider.getBanner();
             return new BaseResponse<>(getBannerRes);
         } catch (BaseException e) {
@@ -52,6 +54,8 @@ public class HomeController {
     public BaseResponse <List<GetProductsRes>> getHomeProducts() {
 
         try{
+            int userIdByJwt = jwtService.getUserIdx();
+            
             List<GetProductsRes> getProductsRes = homeProvider.getHomeProducts();
             return new BaseResponse<>(getProductsRes);
         } catch (BaseException e) {
