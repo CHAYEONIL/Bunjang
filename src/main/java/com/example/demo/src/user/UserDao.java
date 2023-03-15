@@ -27,12 +27,13 @@ public class UserDao {
                         rs.getString("userName"),
                         rs.getString("ID"),
                         rs.getString("Email"),
-                        rs.getString("password"))
+                        rs.getString("password"),
+                        rs.getString("status"))
                 );
     }
 
     public List<GetUserRes> getUsersByEmail(String email){
-        String getUsersByEmailQuery = "select * from UserInfo where email =?";
+        String getUsersByEmailQuery = "select * from UserInfo where email =? and status = ACTIVE";
         String getUsersByEmailParams = email;
         return this.jdbcTemplate.query(getUsersByEmailQuery,
                 (rs, rowNum) -> new GetUserRes(
@@ -40,12 +41,13 @@ public class UserDao {
                         rs.getString("userName"),
                         rs.getString("ID"),
                         rs.getString("Email"),
-                        rs.getString("password")),
+                        rs.getString("password"),
+                        rs.getString("status")),
                 getUsersByEmailParams);
     }
 
     public GetUserRes getUser(int userIdx){
-        String getUserQuery = "select * from UserInfo where userIdx = ?";
+        String getUserQuery = "select * from UserInfo where userIdx = ? and status = ACTIVE";
         int getUserParams = userIdx;
         return this.jdbcTemplate.queryForObject(getUserQuery,
                 (rs, rowNum) -> new GetUserRes(
@@ -53,7 +55,8 @@ public class UserDao {
                         rs.getString("userName"),
                         rs.getString("ID"),
                         rs.getString("Email"),
-                        rs.getString("password")),
+                        rs.getString("password"),
+                        rs.getString("status")),
                 getUserParams);
     }
     
@@ -111,7 +114,7 @@ public class UserDao {
 
     }
     public GetMyPageRes getMyPage(int userIdx){
-        String getMyPageQuery = "select userId, profileImageUrl, userNickName, content, (select case when AVG(score) is null then 0 else AVG(score) end from Review) as scoreAvg, CONCAT('+', TIMESTAMPDIFF(DAY, User.createdAt, now())) as openDay, 'OK' as userStatusCheck from User where userId =?";
+        String getMyPageQuery = "select userId, profileImageUrl, userNickName, content, (select case when AVG(score) is null then 0 else AVG(score) end from Review) as scoreAvg, CONCAT('+', TIMESTAMPDIFF(DAY, User.createdAt, now())) as openDay, 'OK' as userStatusCheck, status from User where userId =? and status = 'ACTIVE'";
         int getMyPageParams = userIdx;
         return jdbcTemplate.queryForObject(getMyPageQuery,
                 (rs, rsNum) -> new GetMyPageRes(
@@ -121,11 +124,12 @@ public class UserDao {
                         rs.getString("content"),
                         rs.getDouble("scoreAvg"),
                         rs.getString("openDay"),
-                        rs.getString("userStatusCheck")),
+                        rs.getString("userStatusCheck"),
+                        rs.getString("status")),
                 getMyPageParams);
     }
     public List<GetProductRes> getProduct(int userIdx){
-        String getProductQuery = "select P.productId, P.userId, P.title, P.price, P.tradeStatus, PI.Imageurl from Product P inner join ProductImage PI on PI.productId = P.productId where P.userId =?";
+        String getProductQuery = "select P.productId, P.userId, P.title, P.price, P.tradeStatus, PI.Imageurl, P.status from Product P inner join ProductImage PI on PI.productId = P.productId where P.userId =? and P.status = 'ACTIVE'";
         int getProductParams = userIdx;
         return jdbcTemplate.query(getProductQuery,
                 (rs, rsNum) -> new GetProductRes(
@@ -134,7 +138,8 @@ public class UserDao {
                         rs.getString("title"),
                         rs.getInt("price"),
                         rs.getString("tradeStatus"),
-                        rs.getString("ImageUrl")),
+                        rs.getString("ImageUrl"),
+                        rs.getString("status")),
                 getProductParams);
     }
 }

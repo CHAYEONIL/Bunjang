@@ -16,4 +16,5 @@ public class GetProductRes {
     private int price;
     private String tradeStatus;
     private String imageUrl;
+    private String status;
 }

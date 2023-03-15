@@ -17,4 +17,5 @@ public class GetMyPageRes {
     private double scoreAvg;
     private String openDay;
     private String userStatusCheck;
+    private String status;
 }
