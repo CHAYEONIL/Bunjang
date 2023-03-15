@@ -8,6 +8,7 @@ import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -93,6 +94,25 @@ public class UserProvider {
                 throw new BaseException(FAILED_TO_LOGIN);
             }
         } catch (Exception exception) {
+            logger.error("App - logIn Provider Error", exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public GetMyPageRes getMyPage(int userIdx) throws BaseException{
+        try {
+            GetMyPageRes getMyPageRes = userDao.getMyPage(userIdx);
+            return getMyPageRes;
+        } catch (Exception exception){
+            logger.error("App - logIn Provider Error", exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+    public List<GetProductRes> getProduct(int userIdx) throws BaseException{
+        try {
+            List<GetProductRes> getProductRes = userDao.getProduct(userIdx);
+            return getProductRes;
+        } catch (Exception exception){
             logger.error("App - logIn Provider Error", exception);
             throw new BaseException(DATABASE_ERROR);
         }
