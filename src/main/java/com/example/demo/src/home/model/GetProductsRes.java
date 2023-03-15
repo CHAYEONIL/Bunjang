@@ -11,14 +11,13 @@ import java.util.List;
 @AllArgsConstructor
 public class GetProductsRes {
 
+
     private int productId;
     private String price;
     private String title;
     private String isSagePay;
     private String tradeStatus;  //Available 인 경우만 넘기기
     private String status;  //Y인 경우만 넘기기
-
-    private List<GetProductImgRes> productImgs;
-
+    private String imageUrl;
 
 }
