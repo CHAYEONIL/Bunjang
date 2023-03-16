@@ -33,7 +33,7 @@ public class UserDao {
     }
 
     public List<GetUserRes> getUsersByEmail(String email){
-        String getUsersByEmailQuery = "select * from UserInfo where email =? and status = ACTIVE";
+        String getUsersByEmailQuery = "select * from User where email =? and status = ACTIVE";
         String getUsersByEmailParams = email;
         return this.jdbcTemplate.query(getUsersByEmailQuery,
                 (rs, rowNum) -> new GetUserRes(
@@ -47,7 +47,7 @@ public class UserDao {
     }
 
     public GetUserRes getUser(int userIdx){
-        String getUserQuery = "select * from UserInfo where userIdx = ? and status = ACTIVE";
+        String getUserQuery = "select * from User where userId = ? and status = ACTIVE";
         int getUserParams = userIdx;
         return this.jdbcTemplate.queryForObject(getUserQuery,
                 (rs, rowNum) -> new GetUserRes(
@@ -76,7 +76,6 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,
                 checkEmailParams);
-
     }
 
     public int modifyUserInfo(PatchUserReq patchUserReq){
