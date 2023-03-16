@@ -175,6 +175,12 @@ public class UserController {
     @GetMapping("{userId}/sellproducts")
     public BaseResponse<List<GetProductRes>> getProduct(@PathVariable("userId") int userId) {
         try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userId != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             List<GetProductRes> getProductRes = userProvider.getProduct(userId);
             return new BaseResponse<>(getProductRes);
         } catch (BaseException exception){
