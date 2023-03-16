@@ -12,6 +12,7 @@ import lombok.Setter;
 public class PostReviewReq {
     private int storeUserId;
     private int purchaseUserId;
+    private int productId;
     private int score;
     private String content;
 }
