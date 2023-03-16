@@ -48,10 +48,10 @@ public class UserService {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
         try {
-            int userIdx = userDao.createUser(postUserReq);
+            int userId = userDao.createUser(postUserReq);
             //jwt 발급.
-            String jwt = jwtService.createJwt(userIdx);
-            return new PostUserRes(jwt, userIdx);
+            String jwt = jwtService.createJwt(userId);
+            return new PostUserRes(jwt, userId);
         } catch (Exception exception) {
             logger.error("App - createUser Service Error", exception);
             throw new BaseException(DATABASE_ERROR);
