@@ -39,6 +39,8 @@ public class LikeController {
     @GetMapping("")
     public BaseResponse<List<GetLikeRes>> getUserId(@RequestParam(value = "userId") int userId) {
         try{
+            int userIdxByJwt = jwtService.getUserIdx();
+
             List<GetLikeRes> getLikeRes = likeProvider.getUserId(userId);
             return new BaseResponse<>(getLikeRes);
         } catch(BaseException exception){
@@ -54,6 +56,8 @@ public class LikeController {
     @PostMapping("")
     public BaseResponse<PostLikeRes> createLike(@RequestBody PostLikeReq postLikeReq) {
         try{
+            int userIdxByJwt = jwtService.getUserIdx();
+
             PostLikeRes postLikeRes = likeService.createLike(postLikeReq);
             return new BaseResponse<>(postLikeRes);
         } catch(BaseException exception){
@@ -69,7 +73,8 @@ public class LikeController {
     @PatchMapping("/{likeId}/status")
     public BaseResponse<String> modifyLikestatus(@PathVariable("likeId") int likeId, @RequestBody Like like){
         try {
-            //같다면 유저네임 변경
+            int userIdxByJwt = jwtService.getUserIdx();
+
             PatchLikeStatusReq patchLikeStatusReq = new PatchLikeStatusReq(likeId, like.getStatus());
             likeService.modifyLikeStatus(patchLikeStatusReq);
 

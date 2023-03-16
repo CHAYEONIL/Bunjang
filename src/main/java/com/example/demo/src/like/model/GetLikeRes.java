@@ -11,6 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class GetLikeRes {
     private int likeId;
-    private int userId;
-    private int productId;
+    private String title;
+    private int price;
+    private String userNickName;
+    private String ImageUrl;
+    private String time;
 }
