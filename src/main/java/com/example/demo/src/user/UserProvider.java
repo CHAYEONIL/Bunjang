@@ -75,7 +75,18 @@ public class UserProvider {
 
     public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException {
         try {
+            if(userDao.checkEmail(postLoginReq.getEmail()) == 0){ // 존재하지 않은 이메일
+                throw new BaseException(FAILED_TO_LOGIN);
+            }
+
             User user = userDao.getPwd(postLoginReq);
+
+            if(user.getStatus().equals("INACTIVE")){ // 비활성화된 유저
+                throw new BaseException(INACTIVE_USER);
+            }
+            if(user.getStatus().equals("DELETED")){ // 탈퇴한 유저
+                throw new BaseException(DELETED_USER);
+            }
 
             String encryptPwd;
             try {

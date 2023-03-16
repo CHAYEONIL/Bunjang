@@ -53,10 +53,13 @@ public class UserController {
         if(postUserReq.getPassword() == null) {
             return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
         }
-
         // 닉네임 유효성 검사
         if(postUserReq.getUserNickName() == null || postUserReq.getUserNickName().length() < 2){
             return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
+        }
+        // 이름 유효성 검사
+        if(postUserReq.getName() == null){
+            return new BaseResponse<>(POST_USERS_EMPTY_NAME);
         }
         try{
             PostUserRes postUserRes = userService.createUser(postUserReq);
@@ -81,12 +84,10 @@ public class UserController {
             if(!isRegexEmail(postLoginReq.getEmail())){ // 이메일 정규 표현
                 return new BaseResponse<>(POST_LOGIN_INVALID_EMAIL);
             }
-
             // 비밀번호 유효성 검사
             if(postLoginReq.getPassword() == null){ // null 값인 경우
                 return new BaseResponse<>(POST_LOGIN_EMPTY_PASSWORD);
             }
-
             PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
             return new BaseResponse<>(postLoginRes);
         } catch (BaseException exception){
@@ -150,7 +151,15 @@ public class UserController {
     @ResponseBody
     @GetMapping("{userId}")
     public BaseResponse<GetMyPageRes> getMyPage(@PathVariable("userId") int userId) {
+
         try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userId != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
             GetMyPageRes getMyPageRes = userProvider.getMyPage(userId);
             return new BaseResponse<>(getMyPageRes);
         } catch (BaseException exception){
@@ -166,6 +175,12 @@ public class UserController {
     @GetMapping("{userId}/sellproducts")
     public BaseResponse<List<GetProductRes>> getProduct(@PathVariable("userId") int userId) {
         try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userId != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
             List<GetProductRes> getProductRes = userProvider.getProduct(userId);
             return new BaseResponse<>(getProductRes);
         } catch (BaseException exception){
