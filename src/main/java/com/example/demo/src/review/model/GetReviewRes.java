@@ -11,8 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetReviewRes {
     private int reviewId;
-    private int storeUserId;
-    private int purchaseUserId;
     private double score;
     private String content;
+    private String title;
+    private String userNickName;
+    private String Time;
 }

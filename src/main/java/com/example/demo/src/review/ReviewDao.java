@@ -30,15 +30,30 @@ public class ReviewDao {
     }
 
     public List<GetReviewRes> getStoreUserId(int storeUserId){
-        String getUsersQuery = "select * from Review where storeUserId = ? and status = 'ACTIVE'";
+        String getUsersQuery = "select R.reviewId, R.score, R.content, P.title, U.userNickName,\n" +
+                "case\n" +
+                "when TIMESTAMPDIFF(YEAR, R.createdAt, now()) = 1 then\n" +
+                "           CONCAT(TIMESTAMPDIFF(YEAR, R.createdAt, now()), '년 전')\n" +
+                "        when TIMESTAMPDIFF(MONTH, R.createdAt, now()) > 3 then\n" +
+                "           CONCAT(TIMESTAMPDIFF(MONTH, R.createdAt, now()), '달 전')\n" +
+                "        when TIMESTAMPDIFF(WEEK, R.createdAt, now()) >= 1 then\n" +
+                "           CONCAT(TIMESTAMPDIFF(WEEK, R.createdAt, now()), '주 전')\n" +
+                "        when TIMESTAMPDIFF(DAY, R.createdAt, now()) >= 1 then\n" +
+                "           CONCAT(TIMESTAMPDIFF(DAY, R.createdAt, now()), '일 전')\n" +
+                "else DATE_FORMAT(P.createdAt, '%p %H : %i') end as Time\n" +
+                "from Review R\n" +
+                "inner join Product P on R.productId = P.productId\n" +
+                "inner join User U on U.userId = P.userId\n" +
+                "where R.storeUserId = ?";
         int getUserParams = storeUserId;
         return this.jdbcTemplate.query(getUsersQuery,
                 (rs,rowNum) -> new GetReviewRes(
                         rs.getInt("reviewId"),
-                        rs.getInt("storeUserId"),
-                        rs.getInt("purchaseUserId"),
                         rs.getDouble("score"),
-                        rs.getString("content")),
+                        rs.getString("content"),
+                        rs.getString("title"),
+                        rs.getString("userNickName"),
+                        rs.getString("Time")),
                 getUserParams);
     }
     public int modifyReview(PatchReviewReq patchReviewReq){
