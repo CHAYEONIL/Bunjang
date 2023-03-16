@@ -4,7 +4,6 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.qna.model.GetQnaIdRes;
 import com.example.demo.src.qna.model.GetQnaRes;
-import com.example.demo.src.review.model.GetReviewRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +35,8 @@ public class QnaController {
     @GetMapping("")
     public BaseResponse<List<GetQnaRes>> getQna() {
         try {
+            int userIdxByJwt = jwtService.getUserIdx();
+
             List<GetQnaRes> getQnaRes = qnaProvider.getQna();
             return new BaseResponse<>(getQnaRes);
         } catch (BaseException e) {
@@ -50,6 +51,8 @@ public class QnaController {
     @GetMapping("{questionId}")
     public BaseResponse<GetQnaIdRes> getQnaId(@PathVariable("questionId") int questionId) {
         try {
+            int userIdxByJwt = jwtService.getUserIdx();
+
             GetQnaIdRes getQnaIdRes = qnaProvider.getQnaId(questionId);
             return new BaseResponse<>(getQnaIdRes);
         } catch (BaseException exception){
@@ -65,6 +68,8 @@ public class QnaController {
     @GetMapping("category")
     public BaseResponse<List<GetQnaRes>> getCategory(@RequestParam(value = "category") String category) {
         try{
+            int userIdxByJwt = jwtService.getUserIdx();
+
             List<GetQnaRes> getQnaRes = qnaProvider.getCategory(category);
             return new BaseResponse<>(getQnaRes);
         } catch(BaseException exception){

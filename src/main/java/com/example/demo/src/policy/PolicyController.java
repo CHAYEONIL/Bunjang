@@ -38,6 +38,8 @@ public class PolicyController {
     @GetMapping("")
     public BaseResponse<List<GetPolicyRes>> getPolicy() {
         try {
+            int userIdxByJwt = jwtService.getUserIdx();
+
             List<GetPolicyRes> getPolicyRes = policyProvider.getPolicy();
             return new BaseResponse<>(getPolicyRes);
         } catch (BaseException e) {
