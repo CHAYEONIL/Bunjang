@@ -46,6 +46,8 @@ public class ReviewController {
             return new BaseResponse<>(POST_REVIEW_EMPTY_CONTENT);
         }
         try{
+            int userIdxByJwt = jwtService.getUserIdx();
+
             PostReviewRes postReviewRes = reviewService.createReview(postReviewReq);
             return new BaseResponse<>(postReviewRes);
         } catch(BaseException exception){
@@ -54,12 +56,14 @@ public class ReviewController {
     }
     /**
      * 상점 리뷰 검색 API
-     * [POST] /reviews
+     * [POST] /reviews?storeUserId={storeUserId}
      */
     @ResponseBody
     @GetMapping("")
     public BaseResponse<List<GetReviewRes>> getStoreUserId(@RequestParam(value = "storeUserId") int storeUserId) {
         try{
+            int userIdxByJwt = jwtService.getUserIdx();
+
             List<GetReviewRes> getReviewRes = reviewProvider.getStoreUserId(storeUserId);
             return new BaseResponse<>(getReviewRes);
         } catch(BaseException exception){
@@ -73,8 +77,12 @@ public class ReviewController {
     @ResponseBody
     @PatchMapping("/{reviewId}")
     public BaseResponse<String> modifyReview(@PathVariable("reviewId") int reviewId, @RequestBody Review review){
+        if(review.getContent()==null){
+            return new BaseResponse<>(POST_REVIEW_EMPTY_CONTENT);
+        }
         try {
-            //같다면 유저네임 변경
+            int userIdxByJwt = jwtService.getUserIdx();
+
             PatchReviewReq patchReviewReq = new PatchReviewReq(reviewId, review.getScore(), review.getContent());
             reviewService.modifyReview(patchReviewReq);
 
@@ -92,7 +100,8 @@ public class ReviewController {
     @PatchMapping("/{reviewId}/status")
     public BaseResponse<String> modifyReviewstatus(@PathVariable("reviewId") int reviewId, @RequestBody Review review){
         try {
-            //같다면 유저네임 변경
+            int userIdxByJwt = jwtService.getUserIdx();
+
             PatchReviewStatusReq patchReviewStatusReq = new PatchReviewStatusReq(reviewId, review.getStatus());
             reviewService.modifyReviewStatus(patchReviewStatusReq);
 

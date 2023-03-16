@@ -4,7 +4,6 @@ import com.example.demo.src.review.model.GetReviewRes;
 import com.example.demo.src.review.model.PatchReviewReq;
 import com.example.demo.src.review.model.PatchReviewStatusReq;
 import com.example.demo.src.review.model.PostReviewReq;
-import com.example.demo.src.user.model.PatchUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -31,7 +30,7 @@ public class ReviewDao {
     }
 
     public List<GetReviewRes> getStoreUserId(int storeUserId){
-        String getUsersQuery = "select * from Review where storeUserId = ?";
+        String getUsersQuery = "select * from Review where storeUserId = ? and status = 'ACTIVE'";
         int getUserParams = storeUserId;
         return this.jdbcTemplate.query(getUsersQuery,
                 (rs,rowNum) -> new GetReviewRes(
@@ -43,13 +42,13 @@ public class ReviewDao {
                 getUserParams);
     }
     public int modifyReview(PatchReviewReq patchReviewReq){
-        String modifyReviewQuery = "update Review set score =?, content =? where reviewId = ? ";
+        String modifyReviewQuery = "update Review set score =?, content =? where reviewId = ?";
         Object[] modifyReviewParams = new Object[]{patchReviewReq.getScore(), patchReviewReq.getContent(), patchReviewReq.getReviewId()};
 
         return this.jdbcTemplate.update(modifyReviewQuery,modifyReviewParams);
     }
     public int modifyReviewStatus(PatchReviewStatusReq patchReviewStatusReq){
-        String modifyReviewQuery = "update Review set status =? where reviewId = ? ";
+        String modifyReviewQuery = "update Review set status =? where reviewId = ?";
         Object[] modifyReviewParams = new Object[]{patchReviewStatusReq.getStatus(), patchReviewStatusReq.getReviewId()};
 
         return this.jdbcTemplate.update(modifyReviewQuery,modifyReviewParams);
