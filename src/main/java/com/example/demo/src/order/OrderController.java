@@ -32,7 +32,7 @@ public class OrderController {
      * @return
      */
     @ResponseBody
-    @PostMapping("{productId}")
+    @PostMapping("/{productId}")
     public BaseResponse<PostOrderRes> createOrder(@PathVariable("productId") int productId, @RequestBody PostOrderReq postOrderReq) {
 
         try {
@@ -51,7 +51,7 @@ public class OrderController {
      * @return
      */
     @ResponseBody
-    @GetMapping("{orderId}")
+    @GetMapping("/{orderId}")
     public BaseResponse<GetOrderRes> getOrder(@PathVariable("orderId") int orderId) {
         try {
             jwtService.getUserIdx();
@@ -63,7 +63,7 @@ public class OrderController {
     }
 
     @ResponseBody
-    @PatchMapping("{orderId}/status")
+    @PatchMapping("/{orderId}/status")
     public BaseResponse<String> deleteOrder(@PathVariable("orderId") int orderId) {
         try {
             int userIdByJwt = jwtService.getUserIdx();
