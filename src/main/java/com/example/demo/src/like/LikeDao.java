@@ -34,7 +34,7 @@ public class LikeDao {
                 "inner join 14_TEST.Product P on L.productId = P.productId\n" +
                 "inner join 14_TEST.User U on P.userId = U.userId\n" +
                 "inner join 14_TEST.ProductImage PI on P.productId = PI.productId\n" +
-                "where L.userId = ?";
+                "where L.userId = ? and L.status = 'ACTIVE'";
         int getUserParams = userId;
         return this.jdbcTemplate.query(getUsersQuery,
                 (rs,rowNum) -> new GetLikeRes(
